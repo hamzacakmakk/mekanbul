@@ -14,7 +14,6 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
       lowercase: true,
-      trim: true,
     },
 
     password: {
@@ -29,9 +28,7 @@ const userSchema = new mongoose.Schema(
       default: "user",
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 
