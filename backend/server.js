@@ -1,5 +1,8 @@
 import userRoutes from "./routes/userRoutes.js";
 import dotenv from 'dotenv';
+import venueRoutes from "./routes/venueRoutes.js";
+
+
 dotenv.config();
 
 import express from 'express';
@@ -13,6 +16,7 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 app.use("/api/users", userRoutes);
+app.use("/api/venues", venueRoutes);
 
 
 app.get("/", (req, res) => {

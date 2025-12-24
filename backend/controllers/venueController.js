@@ -7,6 +7,18 @@ export const getVenues = async (req, res) => {
   res.json(venues);
 };
 
+// get by id
+
+export const getVenueById = async (req, res) => {
+  const venue = await Venue.findById(req.params.id).populate("createdBy", "name email");
+  
+  if (!venue) {
+    return res.status(404).json({ message: "Mekan bulunamadı" });
+  }
+  
+  res.json(venue);
+};
+
 //post
 
 export const createVenue = async (req, res) => {
@@ -76,4 +88,32 @@ export const deleteVenue = async (req, res) => {
 
   await venue.deleteOne();
   res.json({ message: "Mekan silindi" });
+};
+
+
+//comment 
+
+
+export const addComment = async (req, res) => {
+  const { text } = req.body;
+
+  if (!text) {
+    return res.status(400).json({ message: "Yorum boş olamaz" });
+  }
+
+  const venue = await Venue.findById(req.params.id);
+
+  if (!venue) {
+    return res.status(404).json({ message: "Mekan bulunamadı" });
+  }
+
+  const comment = {
+    user: req.user._id,
+    text,
+  };
+
+  venue.comments.push(comment);
+  await venue.save();
+
+  res.status(201).json(venue.comments);
 };
