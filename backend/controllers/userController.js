@@ -33,7 +33,11 @@ export const registerUser = async (req, res) => {
       token: generateToken(user._id),
     });
   } catch (error) {
-    res.status(500).json({ message: "Server hatası" });
+    console.error("Register error:", error);
+    res.status(500).json({ 
+      message: error.message || "Server hatası",
+      error: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 };
 

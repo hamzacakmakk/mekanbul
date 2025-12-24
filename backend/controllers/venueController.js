@@ -3,14 +3,18 @@ import Venue from "../models/venue.js";
 // list 
 
 export const getVenues = async (req, res) => {
-  const venues = await Venue.find().populate("createdBy", "name email");
+  const venues = await Venue.find()
+    .populate("createdBy", "name email")
+    .populate("comments.user", "name email");
   res.json(venues);
 };
 
 // get by id
 
 export const getVenueById = async (req, res) => {
-  const venue = await Venue.findById(req.params.id).populate("createdBy", "name email");
+  const venue = await Venue.findById(req.params.id)
+    .populate("createdBy", "name email")
+    .populate("comments.user", "name email");
   
   if (!venue) {
     return res.status(404).json({ message: "Mekan bulunamadı" });
@@ -115,5 +119,7 @@ export const addComment = async (req, res) => {
   venue.comments.push(comment);
   await venue.save();
 
+  // Yorumları user bilgisiyle birlikte döndür
+  await venue.populate("comments.user", "name email");
   res.status(201).json(venue.comments);
 };
